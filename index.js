@@ -6,6 +6,7 @@
 
   var async = require('async'),
     ON_DEATH = require('death')({ uncaughtException: true }),
+    debug = require('debug')('diehard'),
     handlers = [];
 
   module.exports = function (handler) {
@@ -46,12 +47,12 @@
       };
     });
 
-    console.log('Attempting to exit gracefully...');
+    debug('Attempting to exit gracefully...');
     async.parallel(handlers, function (err) {
       if (err) {
         console.log(err);
       } else {
-        console.log('... graceful exit complete.');
+        debug('... graceful exit completed successfully.');
       }
 
       if (uncaughtErr || err) {
