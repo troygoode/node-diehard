@@ -2,7 +2,7 @@
   "name": "diehard",
   "version": "0.0.1",
   "author": "Troy Goode <troygoode@gmail.com> (https://github.com/troygoode/)",
-  "description": "Gracefully cleanup your program at termination with multiple sync and/or async handlers. Wraps the `death` npm module.",
+  "description": "Gracefully clean up your program at termination with multiple sync and/or async handlers. Wraps the `death` npm module.",
   "keywords": ["sigint", "sigterm", "sigkill", "sigquit", "exception", "kill", "terminate", "process", "clean", "die"],
   "licenses": [
     {"type": "MIT", "url": "http://www.opensource.org/licenses/mit-license.php"}
