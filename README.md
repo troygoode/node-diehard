@@ -6,6 +6,12 @@ Diehard is a node.js module that helps you gracefully clean up your program at t
 
 [`death`](https://github.com/jprichardson/node-death) is an incredibly useful module that abstracts out the need to handle the various kinds of termination events, but ultimately only supports a single handler. I've found that in more complex projects you often have multiple loose ends to clean up, and I desired a solution that would allow me to properly isolate the responsibility for cleaning up each individual resource into dedicated handlers that would are run in parallel. `diehard` solves that problem.
 
+## Installation (via [npm](https://npmjs.org/package/diehard))
+
+```bash
+$ npm install diehard
+```
+
 # Usage
 
 ```javascript
