@@ -5,11 +5,10 @@
   'use strict';
 
   var async = require('async'),
-    ON_DEATH = require('death')({ uncaughtException: true }),
     debug = require('debug')('diehard'),
     handlers = [];
 
-  module.exports = function (handler) {
+  module.exports.register = function (handler) {
     if (handler.length === 0) {
       /*jslint unparam:true*/
       handlers.push(function (signal, uncaughtErr, done) {
@@ -34,34 +33,40 @@
     } else {
       throw new Error('Invalid handler passed to diehard.');
     }
+    debug('Handler registered.');
   };
 
-  ON_DEATH(function (signal, uncaughtErr) {
-    if (uncaughtErr) {
-      console.log(uncaughtErr);
-    }
-
-    handlers = handlers.map(function (handler) {
-      return function (done) {
-        handler(signal, uncaughtErr, done);
-      };
-    });
-
-    debug('Attempting to exit gracefully...');
-    async.parallel(handlers, function (err) {
-      if (err) {
-        console.log(err);
-      } else {
-        debug('... graceful exit completed successfully.');
+  module.exports.listen = function (options) {
+    var ON_DEATH = require('death')(options || { uncaughtException: true });
+    ON_DEATH(function (signal, uncaughtErr) {
+      if (uncaughtErr) {
+        console.log(uncaughtErr);
       }
 
-      if (uncaughtErr || err) {
-        process.exit(1);
-      } else {
-        process.exit(0);
-      }
+      handlers = handlers.map(function (handler) {
+        return function (done) {
+          debug('Calling handler...');
+          handler(signal, uncaughtErr, done);
+        };
+      });
+
+      debug(handlers.length + ' handlers are registered.');
+      debug('Attempting to exit gracefully...');
+      async.parallel(handlers, function (err) {
+        if (err) {
+          console.log(err);
+        } else {
+          debug('... graceful exit completed successfully.');
+        }
+
+        if (uncaughtErr || err) {
+          process.exit(1);
+        } else {
+          process.exit(0);
+        }
+      });
     });
-  });
+  };
 
 }());
 

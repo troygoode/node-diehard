@@ -4,6 +4,8 @@
 (function () {
   'use strict';
 
+  process.env.DEBUG = '*';
+
   var diehard = require('../');
 
   setInterval(function () {
@@ -11,15 +13,17 @@
   }, 1000);
 
   // synchronous handlers
-  diehard(function () {
+  diehard.register(function () {
     console.log('cleanup #1');
   });
 
   // async handlers
-  diehard(function (done) {
+  diehard.register(function (done) {
     console.log('cleanup #2');
     done();
   });
+
+  diehard.listen();
 
 }());
 

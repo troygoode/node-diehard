@@ -23,27 +23,29 @@ setTimeout(function () {
   console.log('Blah blah blah.'); // keeps running until we CTRL+C
 }, 250);
 
-diehard(function () {
+diehard.register(function () {
   //TODO: clean up some resource
   // this is a synchronous handler
 });
 
-diehard(function (done) {
+diehard.register(function (done) {
   //TODO: clean up some resource
   done(); // async, ftw!
 });
 
-diehard(function (signal, done) {
+diehard.register(function (signal, done) {
   //TODO: clean up some resource
   // we also have the `signal` that terminated the process here, in case we care
   done();
 });
 
-diehard(function (signal, uncaughtErr, done) {
+diehard.register(function (signal, uncaughtErr, done) {
   //TODO: clean up some resource
   // if an uncaught error was the reason the process is terminating, we can access that, too
   done();
 });
+
+diehard.listen();
 ```
 
 In the above example, all five termination handlers will be run (in parallel) before the process exits.
