@@ -19,7 +19,7 @@ $ npm install diehard
 ```javascript
 var diehard = require('diehard');
 
-setTimeout(function () {
+setInterval(function () {
   console.log('Blah blah blah.'); // keeps running until we CTRL+C
 }, 250);
 
