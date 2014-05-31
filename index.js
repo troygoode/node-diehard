@@ -9,7 +9,9 @@
     handlers = [];
 
   module.exports.register = function (handler) {
-    if (handler.length === 0) {
+    if (!handler) {
+      throw new Error('You must pass a handler to diehard#register.');
+    } else if (handler.length === 0) {
       /*jslint unparam:true*/
       handlers.push(function (signal, uncaughtErr, done) {
         handler();
@@ -36,36 +38,38 @@
     debug('Handler registered.');
   };
 
-  module.exports.listen = function (options) {
-    var ON_DEATH = require('death')(options || { uncaughtException: true });
-    ON_DEATH(function (signal, uncaughtErr) {
-      if (uncaughtErr) {
-        console.log(uncaughtErr);
+  module.exports.die = function (signal, uncaughtErr) {
+    if (uncaughtErr) {
+      console.log(uncaughtErr);
+    }
+
+    handlers = handlers.map(function (handler) {
+      return function (done) {
+        debug('Calling handler...');
+        handler(signal, uncaughtErr, done);
+      };
+    });
+
+    debug(handlers.length + ' handlers are registered.');
+    debug('Attempting to exit gracefully...');
+    async.parallel(handlers, function (err) {
+      if (err) {
+        console.log(err);
+      } else {
+        debug('... graceful exit completed successfully.');
       }
 
-      handlers = handlers.map(function (handler) {
-        return function (done) {
-          debug('Calling handler...');
-          handler(signal, uncaughtErr, done);
-        };
-      });
-
-      debug(handlers.length + ' handlers are registered.');
-      debug('Attempting to exit gracefully...');
-      async.parallel(handlers, function (err) {
-        if (err) {
-          console.log(err);
-        } else {
-          debug('... graceful exit completed successfully.');
-        }
-
-        if (uncaughtErr || err) {
-          process.exit(1);
-        } else {
-          process.exit(0);
-        }
-      });
+      if (uncaughtErr || err) {
+        process.exit(1);
+      } else {
+        process.exit(0);
+      }
     });
+  };
+
+  module.exports.listen = function (options) {
+    var ON_DEATH = require('death')(options || { uncaughtException: true });
+    ON_DEATH(module.exports.die);
   };
 
 }());
