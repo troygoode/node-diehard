@@ -1,6 +1,6 @@
 {
   "name": "diehard",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "author": "Troy Goode <troygoode@gmail.com> (https://github.com/troygoode/)",
   "description": "Gracefully clean up your program at termination with multiple sync and/or async handlers. Wraps the `death` npm module.",
   "keywords": ["sigint", "sigterm", "sigkill", "sigquit", "exception", "kill", "terminate", "process", "clean", "die"],
@@ -16,17 +16,17 @@
   },
 
   "engines": {
-    "node": ">=0.8.0"
+    "node": "^0.10.0"
   },
 
   "dependencies": {
-    "async": "^0.2",
+    "async": "^0.9",
     "death": "^0.1",
     "debug": "^1.0.4"
   },
 
   "devDependencies": {
-    "jslint": "~0.2"
+    "jslint": "^0.6.1"
   },
 
   "scripts": {

@@ -11,7 +11,9 @@
   module.exports.register = function (handler) {
     if (!handler) {
       throw new Error('You must pass a handler to diehard#register.');
-    } else if (handler.length === 0) {
+    }
+
+    if (handler.length === 0) {
       /*jslint unparam:true*/
       handlers.push(function (signal, uncaughtErr, done) {
         handler();
