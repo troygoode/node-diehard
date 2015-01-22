@@ -6,7 +6,18 @@
 
   var async = require('async'),
     debug = require('debug')('diehard'),
-    handlers = [];
+    assert = require('assert'),
+    handlers = [],
+    diehard = global.diehard;
+
+  if (!diehard) {
+    module.exports.version = require('./package.json').version;
+    diehard = global.diehard = module.exports;
+  } else {
+    assert(diehard.version === require('./package.json').version, 'Can only load one diehard');
+    module.exports = diehard;
+    return;
+  }
 
   module.exports.register = function (handler) {
     if (!handler) {
