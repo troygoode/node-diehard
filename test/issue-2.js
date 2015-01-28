@@ -23,10 +23,12 @@
     process.nextTick(done);
   });
 
-  diehard.listen();
-
   setTimeout(function () {
-    process.kill(process.pid, 'SIGINT');
+    console.log('dieing');
+    diehard.die();
+
+    console.log('dieing again (no handlers will be called)');
+    diehard.die();
   }, 1000);
 
 }());
