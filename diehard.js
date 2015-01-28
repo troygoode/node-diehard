@@ -35,26 +35,27 @@
     handlers = handlers
       .map(function (handler) {
         // transform given handler into a function that takes the signature: (signal, uncaughtErr, done)
-        if (handler.length === 0) {
+        switch (handler.length) { // handle handler differently depending upon argument list length
+        case 0:
           // we were passed a synchronous handler
           /*jslint unparam:true*/
           return function (signal, uncaughtErr, done) {
             handler();
             done();
           };
-        } else if (handler.length === 1) {
+        case 1:
           /*jslint unparam:true*/
           return function (signal, uncaughtErr, done) {
             handler(done);
           };
-        } else if (handler.length === 2) {
+        case 2:
           /*jslint unparam:true*/
           return function (signal, uncaughtErr, done) {
             handler(signal, done);
           };
-        } else if (handler.length === 3) {
+        case 3:
           return handler;
-        } else {
+        default:
           throw new Error('Invalid handler passed to diehard.');
         }
       })
