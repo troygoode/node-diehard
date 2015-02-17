@@ -6,7 +6,8 @@
 
   var async = require('async'),
     debug = require('debug')('diehard'),
-    Diehard;
+    Diehard,
+    timeoutHandler;
 
   Diehard = function (handlers) {
     this.handlers = handlers;
@@ -21,6 +22,13 @@
   };
 
   Diehard.prototype.die = function (signal, uncaughtErr) {
+    if (this.timeout > 0 && !timeoutHandler) {
+      timeoutHandler = setTimeout(function () {
+        console.log('Timed out.  Exiting with error code 2.')
+        process.exit(2);
+      }, this.timeout);
+    }
+
     if (uncaughtErr) {
       console.log(uncaughtErr);
     }
@@ -36,27 +44,27 @@
       .map(function (handler) {
         // transform given handler into a function that takes the signature: (signal, uncaughtErr, done)
         switch (handler.length) { // handle handler differently depending upon argument list length
-        case 0:
-          // we were passed a synchronous handler
-          /*jslint unparam:true*/
-          return function (signal, uncaughtErr, done) {
-            handler();
-            done();
-          };
-        case 1:
-          /*jslint unparam:true*/
-          return function (signal, uncaughtErr, done) {
-            handler(done);
-          };
-        case 2:
-          /*jslint unparam:true*/
-          return function (signal, uncaughtErr, done) {
-            handler(signal, done);
-          };
-        case 3:
-          return handler;
-        default:
-          throw new Error('Invalid handler passed to diehard.');
+          case 0:
+            // we were passed a synchronous handler
+            /*jslint unparam:true*/
+            return function (signal, uncaughtErr, done) {
+              handler();
+              done();
+            };
+          case 1:
+            /*jslint unparam:true*/
+            return function (signal, uncaughtErr, done) {
+              handler(done);
+            };
+          case 2:
+            /*jslint unparam:true*/
+            return function (signal, uncaughtErr, done) {
+              handler(signal, done);
+            };
+          case 3:
+            return handler;
+          default:
+            throw new Error('Invalid handler passed to diehard.');
         }
       })
       .map(function (handler) {
@@ -85,7 +93,9 @@
   };
 
   Diehard.prototype.listen = function (options) {
-    var ON_DEATH = require('death')(options || { uncaughtException: true });
+    options = options || {uncaughtException: true};
+    this.timeout = options.timeout;
+    var ON_DEATH = require('death')(options);
     ON_DEATH(this.die.bind(this));
   };
 
