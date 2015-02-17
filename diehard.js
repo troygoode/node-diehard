@@ -6,8 +6,7 @@
 
   var async = require('async'),
     debug = require('debug')('diehard'),
-    Diehard,
-    timeoutHandler;
+    Diehard;
 
   Diehard = function (handlers) {
     this.handlers = handlers;
@@ -22,8 +21,8 @@
   };
 
   Diehard.prototype.die = function (signal, uncaughtErr) {
-    if (this.timeout > 0 && !timeoutHandler) {
-      timeoutHandler = setTimeout(function () {
+    if (this.timeout > 0 && !this.timeoutHandler) {
+      this.timeoutHandler = setTimeout(function () {
         console.log('Timed out.  Exiting with error code 2.')
         process.exit(2);
       }, this.timeout);
