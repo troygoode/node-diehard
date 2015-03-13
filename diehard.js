@@ -21,6 +21,7 @@
   };
 
   Diehard.prototype.die = function (signal, uncaughtErr) {
+    debug('Die called.');
     if (this.timeout > 0 && !this.timeoutHandler) {
       this.timeoutHandler = setTimeout(function () {
         console.log('Timed out.  Exiting with error code 2.')
@@ -41,6 +42,7 @@
 
     handlers = handlers
       .map(function (handler) {
+        debug('handler.length: ', handler.length);
         // transform given handler into a function that takes the signature: (signal, uncaughtErr, done)
         switch (handler.length) { // handle handler differently depending upon argument list length
           case 0:
