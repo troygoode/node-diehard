@@ -10,4 +10,5 @@ node_js:
   - "iojs-v1.3"
   - "iojs-v1.4"
   - "iojs-v1.5"
+  - "iojs-v1"
   - "iojs"
