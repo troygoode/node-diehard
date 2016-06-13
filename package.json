@@ -3,28 +3,40 @@
   "version": "1.5.1",
   "author": "Troy Goode <troygoode@gmail.com> (https://github.com/troygoode/)",
   "description": "Gracefully clean up your program at termination with multiple sync and/or async handlers. Wraps the `death` npm module.",
-  "keywords": ["sigint", "sigterm", "sigkill", "sigquit", "exception", "kill", "terminate", "process", "clean", "die"],
-  "licenses": [
-    {"type": "MIT", "url": "http://www.opensource.org/licenses/mit-license.php"}
+  "keywords": [
+    "sigint",
+    "sigterm",
+    "sigkill",
+    "sigquit",
+    "exception",
+    "kill",
+    "terminate",
+    "process",
+    "clean",
+    "die"
   ],
-
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://www.opensource.org/licenses/mit-license.php"
+    }
+  ],
   "homepage": "https://github.com/troygoode/node-diehard/",
-  "bugs": {"url": "https://github.com/troygoode/node-diehard/issues"},
+  "bugs": {
+    "url": "https://github.com/troygoode/node-diehard/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/troygoode/node-diehard.git"
   },
-
   "dependencies": {
     "async": "^0.9",
     "death": "^0.1",
-    "debug": "^1.0.4"
+    "debug": "^2.2.0"
   },
-
   "devDependencies": {
     "jslint": "^0.6.1"
   },
-
   "scripts": {
     "lint": "find . -path ./node_modules -prune -o -name '*.js' -print0 -o -name '*.json' -print0 | xargs -0 node node_modules/jslint/bin/jslint"
   }
