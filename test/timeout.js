@@ -6,9 +6,9 @@
 
   process.env.DEBUG = '*';
 
-  var diehard = new require('../');
+  var diehard = require('../');
 
-  diehard.register(function (done) {
+  diehard.register(function () {
     console.log('Async handler called.  I am not calling the callback since this one will never complete.  You should expect to see: "Timed out.  Exiting with error code 2."\n');
   });
 
