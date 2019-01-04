@@ -35,8 +35,8 @@
     "debug": "^3.1"
   },
   "devDependencies": {
-    "jslint": "^0.6.1",
-    "mocha": "^3.5.3"
+    "jslint": "^0.12.0",
+    "mocha": "^5.2.0"
   },
   "scripts": {
     "lint": "find . -path ./node_modules -prune -o -name '*.js' -print0 -o -name '*.json' -print0 | xargs -0 node node_modules/jslint/bin/jslint",
